@@ -1,14 +1,10 @@
 const { load } = require("csv-load-sync");
 const { sequelize, Sequelize } = require("../models");
 const { getItemFromWoWHead } = require("../utils");
-const WoWDB = require("wow-classic-items");
-
-const ItemsWoW = new WoWDB.Items();
 
 const Boss = require("../models/Boss")(sequelize, Sequelize.DataTypes);
 const Item = require("../models/Item")(sequelize, Sequelize.DataTypes);
 const User = require("../models/User")(sequelize, Sequelize.DataTypes);
-const Wishlist = require("../models/Wishlist")(sequelize, Sequelize.DataTypes);
 
 const Bosses = [
   {
@@ -35,7 +31,7 @@ const Bosses = [
     name: "L assemblée de fer",
     tag: "iron-council",
     image:
-      "https://static.wikia.nocookie.net/minecraft_gamepedia/images/f/fc/Iron_Ingot_JE3_BE2.png",
+      "https://static.wikia.nocookie.net/wowpedia/images/5/51/Boss_icon_Assembly_of_Iron.png",
   },
   {
     name: "Kologarn",
@@ -85,12 +81,13 @@ const Bosses = [
   {
     name: "Trash",
     tag: "trash",
-    image: "https://rerollcdn.com/WOW/Raids/algalon-the-observer.png",
+    image:
+      "https://wow.zamimg.com/uploads/blog/images/30988-wrath-classic-ptr-ulduar-patch-developer-notes.jpg",
   },
   {
     name: "Craft",
     tag: "craft",
-    image: "https://rerollcdn.com/WOW/Raids/algalon-the-observer.png",
+    image: "https://wow.zamimg.com/images/wow/icons/large/inv_misc_runedorb_01.jpg",
   },
 ];
 
@@ -115,7 +112,14 @@ function getlistItems() {
     role: "heal",
     isAdmin: true,
   });
-
+  await User.create({
+    login: "Disco",
+    password: "azerty",
+    pseudo: "Disco",
+    classe: "priest",
+    role: "heal",
+    isAdmin: false,
+  });
   await Promise.all(getListBoss().map((boss) => Boss.create(boss)));
   await Promise.all(
     getlistItems().map((item) => {
@@ -124,7 +128,6 @@ function getlistItems() {
           name: item.BOSS,
         },
       }).then(async (boss) => {
-        console.log(boss.name);
         let itemWH = await getItemFromWoWHead(item.ITEMID);
         let cleanItem = {
           itemID: item.ITEMID,

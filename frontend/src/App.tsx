@@ -6,6 +6,10 @@ import useLocalStorage from "./utils/UselocalStorage";
 
 import Login from "./components/Login";
 import Home from "./components/Home";
+import { useEffect } from "react";
+import { getBosses } from "./services/Bosses";
+import StyledButton from "./components/Button";
+import { User } from "./types/User";
 
 const AppContainer = styled.div`
   display: flex;
@@ -55,7 +59,7 @@ const Container = styled.div`
   font-family: "Montserrat", sans-serif;
   border-radius: 1rem;
   padding: 1rem;
-  max-height: 80vh;
+  /* max-height: 80vh; */
   max-width: calc(70vw - 2rem);
   min-width: 600px;
   overflow: scroll;
@@ -77,16 +81,26 @@ const Logout = styled.div`
 
 function App() {
   const [token, setToken] = useLocalStorage("token", false);
-  
+  const [user, setUser] = useLocalStorage<User | boolean>("user", false);
+  const [Bosses, setBosses] = useLocalStorage("Bosses", []);
+
+  useEffect(() => {
+    if (Bosses.length === 0) {
+      getBosses().then((res) => {
+        setBosses(res);
+      });
+    }
+  }, [Bosses]);
   return (
     <AppContainer>
       <Header>
-        <span></span>
+        <StyledButton label="resetBoss" onClick={() => setBosses([])} />
         <H1>Fearless Tools 🔧</H1>
         {token && (
           <Logout
             onClick={() => {
               setToken(logout());
+              setUser(false);
             }}
           >
             ❌
@@ -100,7 +114,11 @@ function App() {
               path="/"
               element={
                 <Container>
-                  {token ? <Home /> : <Login setToken={setToken} />}
+                  {token ? (
+                    <Home />
+                  ) : (
+                    <Login setToken={setToken} setUser={setUser} />
+                  )}
                 </Container>
               }
             />

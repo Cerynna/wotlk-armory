@@ -1,7 +1,7 @@
 const express = require("express");
-const { sortBy, groupBy } = require("lodash");
-const { Boss, Item, User } = require("../models");
+const { Boss, Item, User, Wishlist, ItemWishlist } = require("../models");
 const router = express.Router();
+const Promise = require("bluebird");
 
 function generateToken() {
   return (
@@ -9,25 +9,24 @@ function generateToken() {
   );
 }
 
-// middleware that is specific to this router
 router.use((req, res, next) => {
   console.log("Auth: ", req.path);
   next();
 });
-// define the home page route
 router.post("/", async (req, res) => {
   let { login, password } = req.body;
-  console.log(req.body, login, password);
   User.findOne({
     where: {
       login: login,
       password: password,
     },
+    attributes: {
+      exclude: ["password", "login", "token", "createdAt", "updatedAt"],
+    },
     raw: true,
   })
     .then(async (user) => {
       if (user) {
-        console.log(user);
         let token = generateToken();
         await User.update(
           { token },
@@ -37,9 +36,7 @@ router.post("/", async (req, res) => {
             },
           }
         );
-        /* user.token = token;
-        await user.save(); */
-        return res.send(token);
+        return res.send({ token, user });
       } else {
         return res.send(false);
       }
@@ -55,27 +52,58 @@ router.get("/whoiam", async (req, res) => {
     token = token.split(" ")[1];
   }
   token = token.replace(/"/g, "");
-  await User.findOne({
+  let user = await User.findOne({
     where: {
       token: token,
     },
-    attributes: { exclude: ["password", "login"] },
+    attributes: {
+      exclude: ["password", "login", "token", "createdAt", "updatedAt"],
+    },
     raw: true,
-  })
-    .then((user) => {
-      if (user) {
-        console.log(user);
-        return res.send(user);
-      } else {
-        return res.send(false);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      return res.send(false);
-    });
+  });
+  if (!user) {
+    return res.status(401).send("Invalid token");
+  }
+  let wishlists = await Wishlist.findAll({
+    where: {
+      userID: user.id,
+    },
+    raw: true,
+  }).then((wishlists) => {
+    return Promise.map(
+      wishlists,
+      async (wishlist) => {
+        return {
+          ...wishlist,
+          items: await ItemWishlist.findAll({
+            where: {
+              wishlistID: wishlist.id,
+            },
+            raw: true,
+          }).then(async (items) => {
+            return Promise.map(
+              items,
+              async (item) => {
+                let itemDB = await Item.findOne({
+                  where: {
+                    itemID: item.itemID,
+                  },
+                  raw: true,
+                });
+                return {
+                  item: itemDB,
+                  ...item,
+                };
+              },
+              { concurrency: 1 }
+            );
+          }),
+        };
+      },
+      { concurrency: 1 }
+    );
+  });
+  return res.send({ ...user, wishlists });
 });
-router.get("/", async (req, res) => {
-  return res.send("Auth");
-});
+
 module.exports = router;

@@ -2,13 +2,14 @@ const { Sequelize } = require("sequelize");
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "../database.sqlite",
+  storage: "./database.sqlite",
   logging: false,
 });
 const Boss = require("./Boss")(sequelize, Sequelize.DataTypes);
 const Item = require("./Item")(sequelize, Sequelize.DataTypes);
 const User = require("./User")(sequelize, Sequelize.DataTypes);
 const Wishlist = require("./Wishlist")(sequelize, Sequelize.DataTypes);
+const ItemWishlist = require("./ItemWishlist")(sequelize, Sequelize.DataTypes);
 
 (async () => {
   try {
@@ -19,4 +20,12 @@ const Wishlist = require("./Wishlist")(sequelize, Sequelize.DataTypes);
   }
 })();
 
-module.exports = { sequelize, Sequelize, Boss, Item, User, Wishlist };
+module.exports = {
+  sequelize,
+  Sequelize,
+  Boss,
+  Item,
+  User,
+  Wishlist,
+  ItemWishlist,
+};

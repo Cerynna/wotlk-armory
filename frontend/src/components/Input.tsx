@@ -1,4 +1,29 @@
 import styled from "styled-components";
+const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.25rem;
+`;
+
+const Input = styled.input`
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  &:focus {
+    outline: none;
+  }
+  &:disabled {
+    background-color: #ffffff50;
+    color: #000000;
+  }
+`;
+const Label = styled.label`
+  font-weight: 700;
+`;
 
 export default function StyledInput({
   refInput,
@@ -10,29 +35,8 @@ export default function StyledInput({
   name,
   id,
   className,
+  disabled,
 }: InputProps) {
-  const Field = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0.25rem;
-  `;
-
-  const Input = styled.input`
-    border: none;
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;
-    text-align: center;
-    border-radius: 0.5rem;
-    &:focus {
-      outline: none;
-    }
-  `;
-  const Label = styled.label`
-    font-weight: 700;
-  `;
-
   return (
     <Field>
       {label && <Label htmlFor={id}>{label}</Label>}
@@ -45,6 +49,7 @@ export default function StyledInput({
         placeholder={placeholder}
         name={name}
         id={id}
+        disabled={disabled}
       />
     </Field>
   );
@@ -60,4 +65,5 @@ interface InputProps {
   name?: string;
   id?: string;
   className?: string;
+  disabled?: boolean;
 }

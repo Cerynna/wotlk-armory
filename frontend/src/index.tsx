@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./styles/reset.css";
-
+export const API_URL = "http://localhost:5000/";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

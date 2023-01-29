@@ -1,14 +1,12 @@
 import axios from "axios";
+import { API_URL } from "..";
 
-const API_URL = "http://localhost:5000/";
 export async function login(login: string, password: string) {
-  console.log("login", login, password);
   let response = await axios.post(API_URL + "auth/", {
     login: login,
     password: password,
   });
   if (response.data) {
-    console.log(response.data);
     return response.data;
   }
   return false;
@@ -29,7 +27,6 @@ export async function whoiam() {
       return response.data;
     })
     .catch((error) => {
-      console.log(error);
       return false;
     });
 }

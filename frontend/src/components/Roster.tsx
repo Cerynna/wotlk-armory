@@ -1,7 +1,14 @@
 import styled from "styled-components";
 import { CharacterType, FindClass, WishlistType } from "../types/Character";
 import Character from "./Character";
-
+const RosterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  grid-gap: 1rem;
+  align-items: flex-start;
+  justify-content: center;
+`;
 export default function Roster() {
   const defaultWL = {
     items: [
@@ -15,6 +22,11 @@ export default function Roster() {
       name: "Hystérias",
       class: FindClass("druid"),
       wishlist: [defaultWL, defaultWL],
+    } as CharacterType,
+    {
+      name: "Aphynaroth",
+      class: FindClass("warlock"),
+      wishlist: [defaultWL],
     } as CharacterType,
     {
       name: "Byol",
@@ -57,19 +69,12 @@ export default function Roster() {
       wishlist: [defaultWL],
     } as CharacterType,
   ];
-  const Roster = styled.div`
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    grid-gap: 1rem;
-    align-items: flex-start;
-    justify-content: center;
-  `;
+
   return (
-    <Roster>
+    <RosterContainer>
       {JSONRoster.map((character) => {
         return <Character character={character} />;
       })}
-    </Roster>
+    </RosterContainer>
   );
 }
