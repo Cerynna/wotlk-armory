@@ -107,18 +107,18 @@ export default function ListLootBoss({ tag }: { tag: string }) {
           <RaidMode key={mode}>
             <h2>Raid {mode}</h2>
             {items &&
-              items[mode].map((item: Item) => {
-                if (item.wishlists.length > 0) {
+              items[mode].map((data) => {
+                if (data.wishlists.length > 0) {
                   return (
-                    <BossItem datatype={item.raidMode} key={item.itemID}>
-                      <Header datatype={item.raidMode}>
-                        <ItemIcon url={item.image} />
-                        <ItemName color={getQualityColor(item.quality)}>
-                          {item.name}
+                    <BossItem datatype={data.item.raidMode} key={data.item.itemID}>
+                      <Header datatype={data.item.raidMode}>
+                        <ItemIcon url={data.item.image} />
+                        <ItemName color={getQualityColor(data.item.quality)}>
+                          {data.item.name}
                         </ItemName>
                       </Header>
                       <WhoNeedThat>
-                        {item.wishlists.map((item) => {
+                        {data.wishlists.map((item) => {
                           return (
                             <IneedThat
                               item={item}
@@ -160,7 +160,7 @@ const ContainerIneedThat = styled.div`
     &::before {
       font-weight: 600;
       display: flex;
-      justify-content: flex-start;
+      justify-content: flex-end;
       align-items: center;
       position: absolute;
       content: "${(props: { textAttributed: string }) => {
@@ -170,7 +170,7 @@ const ContainerIneedThat = styled.div`
       width: calc(100% - 1rem);
       left: 0;
       bottom: 0;
-      background-color: #000000e6;
+      background-color: #00000099;
       transition: 0.4s;
       padding: 0.5rem;
     }

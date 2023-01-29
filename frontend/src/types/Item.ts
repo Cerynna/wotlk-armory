@@ -2,7 +2,10 @@ import { User } from "./User";
 import { Wishlist } from "./Wishlist";
 
 export type Items = {
-  [key: string]: Item[];
+  [key: string]: {
+    item: Item;
+    wishlists: ItemWishList[];
+  }[];
 };
 export type ItemWishList = {
   userID: number;
