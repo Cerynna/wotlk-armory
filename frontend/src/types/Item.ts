@@ -1,3 +1,4 @@
+import { BossType } from "./Boss";
 import { User } from "./User";
 import { Wishlist } from "./Wishlist";
 
@@ -8,6 +9,7 @@ export type Items = {
   }[];
 };
 export type ItemWishList = {
+  id: number;
   userID: number;
   itemID: number;
   wishlistID: number;
@@ -29,6 +31,10 @@ export type Item = {
   bossID: number;
   raidSize: number;
   wishlists: ItemWishList[];
+  boss?: BossType;
+  attributed?: number;
+  attributedBy?: number;
+  attributedDate?: string;
 };
 
 export const Quality = [

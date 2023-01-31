@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { User } from "../types/User";
 import useLocalStorage from "../utils/UselocalStorage";
+import Admin from "./Admin";
 import Profil from "./Profil";
 import Roster from "./Roster";
 import WishList from "./WishList";
@@ -22,7 +23,7 @@ const NavLink = styled.div`
   }
 `;
 export default function Home() {
-  const [path, setPath] = useState("/wishlist");
+  const [path, setPath] = useState("/profil");
   const [user] = useLocalStorage<User | false>("user", false);
   const isAdmin = user && user.isAdmin ? true : false;
   return (
@@ -36,6 +37,7 @@ export default function Home() {
       {path === "/roster" && <Roster />}
       {path === "/wishlist" && <WishList />}
       {path === "/profil" && <Profil />}
+      {path === "/admin" && <Admin />}
     </>
   );
 }

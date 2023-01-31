@@ -4,25 +4,30 @@ import styled from "styled-components";
 import { whoiam } from "../services/Auth";
 import { getItemById } from "../services/Item";
 import { postWishlist } from "../services/Wishlist";
+import { BossType } from "../types/Boss";
 import { FindClass, FindRole } from "../types/Character";
 import { Item } from "../types/Item";
+import { isJson } from "../utils/Tools";
 import StyledButton from "./Button";
 import StyledInput from "./Input";
 import ItemExport from "./ItemExport";
 import LoadingSpinner from "./LoadingSpinner";
+import Tutorial from "./Tutorial";
 
 type ItemWishlist = {
   userID: number;
   itemID: number;
   wishlistID: number;
-  attributed: boolean;
+  attributed: number;
   attributedBy: number;
   attributedDate: string;
   item: Item;
+  boss: BossType;
 };
 type WishList = {
   name: string;
   items: ItemWishlist[];
+  validate: number;
 };
 type User = {
   pseudo: string;
@@ -106,18 +111,30 @@ export default function Profil() {
   }
 
   const [buzy, setBuzy] = useState(false);
-  const [wishlist, setwishlist] = useState<(Item | number)[] | false>(false);
+  const [wishlist, setwishlist] = useState<Item[] | false>(false);
   const refNameWishlist = useRef<HTMLInputElement>(null);
   const inProgress = useRef(false);
   const [user, setUser] = useState<User | false>(false);
   const [currentWL, setCurrentWL] = useState<string | false>(false);
-  console.log(user);
+
+  const [tutorial, setTutorial] = useState(false);
+
   const showWishlist = async (wishlist: WishList) => {
-    console.log(wishlist);
     setCurrentWL(wishlist.name);
     setBuzy(true);
-    setwishlist(wishlist.items.map((itemWishlist) => itemWishlist.item));
+    setwishlist(
+      wishlist.items.map((itemWishlist) => {
+        return {
+          ...itemWishlist.item,
+          boss: itemWishlist.boss,
+          attributed: itemWishlist.attributed,
+          attributedBy: itemWishlist.attributedBy,
+          attributedDate: itemWishlist.attributedDate,
+        };
+      })
+    );
     setBuzy(false);
+    setTutorial(false);
   };
 
   useEffect(() => {
@@ -148,11 +165,16 @@ export default function Profil() {
         </Row>
       </Header>
       <H3>WishList</H3>
+      {buzy && <LoadingSpinner />}
       <ListWishlist>
         {user.wishlists.map((wishlist: WishList) => {
+          const name = `${wishlist.validate === 1 ? "✅" : "⏳"} ${
+            wishlist.name
+          }`;
           return (
             <StyledButton
-              label={wishlist.name}
+              key={wishlist.name}
+              label={name}
               onClick={async () => {
                 showWishlist(wishlist);
               }}
@@ -164,8 +186,13 @@ export default function Profil() {
           onClick={() => {
             const clipboardContent = navigator.clipboard.readText();
             clipboardContent.then(async (text) => {
-              if (text) {
+              setTutorial(false);
+              setwishlist(false);
+              if (text && isJson(text)) {
                 setwishlist(await parse80Upgrade(text));
+                refNameWishlist.current?.focus();
+              } else {
+                setTutorial(true);
               }
             });
           }}
@@ -177,17 +204,20 @@ export default function Profil() {
             <>
               <StyledInput
                 refInput={refNameWishlist}
-                placeholder="Nom de la liste"
-                value={currentWL ? currentWL : "Uludar NM"}
+                placeholder="Choisie un nom"
+                value={currentWL ? currentWL : ""}
                 disabled={currentWL ? true : false}
               />
-              {wishlist.map((item: Item | number) => {
+              {wishlist.map((item: Item) => {
                 return <ItemExport item={item} />;
               })}
               {!currentWL && (
                 <StyledButton
                   label={"Valider"}
                   onClick={async () => {
+                    if (!refNameWishlist.current?.value)
+                      return alert("Nom de la liste manquant");
+
                     setBuzy(true);
                     let result = await postWishlist(
                       wishlist,
@@ -208,7 +238,8 @@ export default function Profil() {
           )}
         </ListExport>
       )}
-      {buzy && <LoadingSpinner />}
+
+      {tutorial && <Tutorial />}
     </Container>
   );
 }

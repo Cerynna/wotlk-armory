@@ -19,6 +19,10 @@ const ItemContainer = styled.div`
   justify-content: flex-start;
   gap: 1rem;
   width: 100%;
+  border-radius: 0.5rem;
+  &[data-attribued="true"] {
+    background-color: rgba(0, 227, 106, 0.2);
+  }
 `;
 const ItemHeader = styled.div`
   display: flex;
@@ -46,21 +50,45 @@ const ItemName = styled.div`
   font-weight: 700;
   font-size: 1rem;
 `;
-export default function ItemExport({ item }: { item: Item | number }) {
-  if (typeof item === "number") {
-    return <></>;
-  }
-  if (!item) return <></>;
+const ItemBoss = styled.div`
+  width: 220px;
+  font-size: 1rem;
+  color: #ffffff;
+`;
+const ItemMode = styled.div`
+  font-size: 1rem;
+  color: #ffffff;
+`;
+const IconAttributed = styled.div`
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
+export default function ItemExport({ item }: { item: Item }) {
+  if (!item.id) return <></>;
   return (
     <Container key={item.id}>
-      <ItemContainer>
+      <ItemContainer data-attribued={item.attributed === 1 ? true : false}>
         <ItemHeader>
+          {item.boss && (
+            <>
+              <IconAttributed>
+                {item.attributed === 1 ? "✔️" : ""}
+              </IconAttributed>
+              <ItemMode>
+                {item.raidSize}
+                {item.raidMode}
+              </ItemMode>
+              <ItemBoss>{item.boss!.name}</ItemBoss>
+            </>
+          )}
+
           <ItemIcon url={item.image} />
-          <ItemName quality={item.quality}>
-            {item.name}
-            {item.bossID}
-          </ItemName>
+          <ItemName quality={item.quality}>{item.name}</ItemName>
         </ItemHeader>
       </ItemContainer>
     </Container>

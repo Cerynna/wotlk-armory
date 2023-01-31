@@ -110,7 +110,10 @@ export default function ListLootBoss({ tag }: { tag: string }) {
               items[mode].map((data) => {
                 if (data.wishlists.length > 0) {
                   return (
-                    <BossItem datatype={data.item.raidMode} key={data.item.itemID}>
+                    <BossItem
+                      datatype={data.item.raidMode}
+                      key={data.item.itemID}
+                    >
                       <Header datatype={data.item.raidMode}>
                         <ItemIcon url={data.item.image} />
                         <ItemName color={getQualityColor(data.item.quality)}>
@@ -119,12 +122,7 @@ export default function ListLootBoss({ tag }: { tag: string }) {
                       </Header>
                       <WhoNeedThat>
                         {data.wishlists.map((item) => {
-                          return (
-                            <IneedThat
-                              item={item}
-                              key={item.user.pseudo + item.itemID}
-                            />
-                          );
+                          return <IneedThat item={item} key={item.id} />;
                         })}
                       </WhoNeedThat>
                     </BossItem>
@@ -144,6 +142,7 @@ const Pseudo = styled.div`
 `;
 const WLName = styled.div`
   font-size: 0.75rem;
+  color: ${(props: { color: string }) => props.color};
 `;
 const ContainerIneedThat = styled.div`
   display: flex;
@@ -167,12 +166,13 @@ const ContainerIneedThat = styled.div`
         return props.textAttributed;
       }}";
       height: calc(100% - 1rem);
-      width: calc(100% - 1rem);
+      width: calc(100% - 5.5rem);
       left: 0;
       bottom: 0;
       background-color: #00000099;
       transition: 0.4s;
       padding: 0.5rem;
+      padding-right: 5rem;
     }
   }
 `;
@@ -193,7 +193,6 @@ const AttribThat = styled.div`
 
 const IneedThat = ({ item }: { item: ItemWishList }) => {
   const { user, wishlist } = item;
-
   const [attributed, setAttributed] = useState(
     item.attributed === 1 ? true : false
   );
@@ -222,7 +221,9 @@ const IneedThat = ({ item }: { item: ItemWishList }) => {
     >
       <Who>
         <Pseudo color={FindClass(user.classe)!.color}>{user.pseudo}</Pseudo>
-        <WLName>{wishlist.name}</WLName>
+        <WLName color={wishlist.validate ? "green" : "red"}>
+          {wishlist.name}
+        </WLName>
       </Who>
       {isAdmin && (
         <AttribThat>

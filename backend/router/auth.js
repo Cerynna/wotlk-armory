@@ -90,8 +90,17 @@ router.get("/whoiam", async (req, res) => {
                   },
                   raw: true,
                 });
+                if (!itemDB)
+                  return Promise.resolve({ item: null, boss: null, ...item });
+                let boss = await Boss.findOne({
+                  where: {
+                    id: itemDB.bossID,
+                  },
+                  raw: true,
+                });
                 return {
                   item: itemDB,
+                  boss,
                   ...item,
                 };
               },

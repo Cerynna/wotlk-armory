@@ -18,8 +18,12 @@ const Container = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 0.5rem;
+  padding: 1rem;
   gap: 1rem;
-  width: 100%;
+  width: calc(100% - 2rem);
+  color: white;
 `;
 const ListBoss = styled.div`
   display: flex;
@@ -29,7 +33,7 @@ const ListBoss = styled.div`
   flex-wrap: wrap;
   gap: 0.25rem;
 `;
-const BossItem = styled.div`
+const Boss = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -38,8 +42,13 @@ const BossItem = styled.div`
   color: white;
   border-radius: 0.5rem;
   cursor: pointer;
+  border: 1px solid transparent;
   &:hover {
     transform: scale(1.05);
+  }
+  &[data-active="true"] {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
   }
 `;
 export default function WishList() {
@@ -50,9 +59,13 @@ export default function WishList() {
       <ListBoss>
         {Bosses.map((boss) => {
           return (
-            <BossItem key={boss.name} onClick={() => setCurrentBoss(boss.tag)}>
+            <Boss
+              key={boss.name}
+              onClick={() => setCurrentBoss(boss.tag)}
+              data-active={currentBoss === boss.tag ? true : false}
+            >
               {<BossIcon url={boss.image} />}
-            </BossItem>
+            </Boss>
           );
         })}
       </ListBoss>

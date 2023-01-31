@@ -94,7 +94,7 @@ function App() {
   return (
     <AppContainer>
       <Header>
-        <StyledButton label="resetBoss" onClick={() => setBosses([])} />
+        <span />
         <H1>Fearless Tools 🔧</H1>
         {token && (
           <Logout
