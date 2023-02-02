@@ -1,7 +1,8 @@
 const express = require("express");
-const { Boss, Item, User, Wishlist, ItemWishlist } = require("../models");
 const router = express.Router();
+const { Boss, Item, User, Wishlist, ItemWishlist } = require("../models");
 const Promise = require("bluebird");
+const { verifAuth } = require("../utils");
 
 function generateToken() {
   return (
@@ -42,10 +43,51 @@ router.post("/", async (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
       return res.send(false);
     });
 });
+
+router.post("/register", async (req, res) => {
+  let { login, password } = req.body;
+  let token = generateToken();
+  let users = await User.findAll({
+    where: {
+      login: login,
+    },
+    raw: true,
+  });
+  if (users.length > 0) {
+    return res.status(400).send("User already exists");
+  }
+  let user = await User.create({
+    login,
+    password,
+    pseudo: null,
+    classe: null,
+    role: null,
+    isAdmin: false,
+    token: token,
+  });
+  return res.send({ token, user });
+});
+
+router.post("/createprofile", verifAuth, async (req, res) => {
+  let { pseudo, classe, role } = req.body;
+  let user = await User.update(
+    {
+      pseudo,
+      classe,
+      role,
+    },
+    {
+      where: {
+        id: req.user.id,
+      },
+    }
+  );
+  return res.send(user);
+});
+
 router.get("/whoiam", async (req, res) => {
   let token = req.headers.authorization;
   if (token) {
@@ -57,7 +99,7 @@ router.get("/whoiam", async (req, res) => {
       token: token,
     },
     attributes: {
-      exclude: ["password", "login", "token", "createdAt", "updatedAt"],
+      exclude: ["password", "token", "createdAt", "updatedAt"],
     },
     raw: true,
   });

@@ -4,7 +4,7 @@ const Field = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0.25rem;
+  width: 100%;
 `;
 
 const Input = styled.input`
@@ -24,6 +24,18 @@ const Input = styled.input`
 const Label = styled.label`
   font-weight: 700;
 `;
+interface InputProps {
+  refInput?: React.RefObject<HTMLInputElement>;
+  label?: string;
+  type?: string;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  name?: string;
+  id?: string;
+  className?: string;
+  disabled?: boolean;
+}
 
 export default function StyledInput({
   refInput,
@@ -53,17 +65,4 @@ export default function StyledInput({
       />
     </Field>
   );
-}
-
-interface InputProps {
-  refInput?: React.RefObject<HTMLInputElement>;
-  label?: string;
-  type?: string;
-  value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  name?: string;
-  id?: string;
-  className?: string;
-  disabled?: boolean;
 }

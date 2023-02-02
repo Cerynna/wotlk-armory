@@ -12,6 +12,41 @@ export async function login(login: string, password: string) {
   return false;
 }
 
+export async function register(login: string, password: string) {
+  let response = await axios.post(API_URL + "auth/register", {
+    login: login,
+    password: password,
+  });
+  if (response.data) {
+    return response.data;
+  }
+  return false;
+}
+
+export async function createProfile(
+  pseudo: string,
+  classe: string,
+  role: string
+) {
+  let response = await axios.post(
+    API_URL + "auth/createprofile",
+    {
+      pseudo,
+      classe,
+      role,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    }
+  );
+  if (response.data) {
+    return response.data;
+  }
+  return false;
+}
+
 export function logout() {
   return false;
 }

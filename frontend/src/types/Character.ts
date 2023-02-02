@@ -1,7 +1,9 @@
 export type CharacterType = {
-  name: string;
-  class: typeof Classes[number];
-  wishlist?: WishlistType[];
+  id: number;
+  pseudo: string;
+  classe: string;
+  wishlists?: WishlistType[];
+  isAdmin: boolean;
 };
 export type WishlistType = {
   items: number[];
@@ -20,7 +22,7 @@ export const FindRole = (tag: string) => {
 
 export const Classes = [
   {
-    name: "Warrior",
+    name: "Guerrier",
     value: "warrior",
     specs: ["Arms", "Fury", "Protection"],
     icon: "/classicons/square/warrior_square.png",
@@ -34,35 +36,35 @@ export const Classes = [
     color: "#F58CBA",
   },
   {
-    name: "Hunter",
+    name: "Chasseur",
     value: "hunter",
     specs: ["Beast Mastery", "Marksmanship", "Survival"],
     icon: "/classicons/square/hunter_square.png",
     color: "#ABD473",
   },
   {
-    name: "Rogue",
+    name: "Voleur",
     value: "rogue",
     specs: ["Assassination", "Outlaw", "Subtlety"],
     icon: "/classicons/square/rogue_square.png",
     color: "#FFF569",
   },
   {
-    name: "Priest",
+    name: "Prètre",
     value: "priest",
     specs: ["Discipline", "Holy", "Shadow"],
     icon: "/classicons/square/priest_square.png",
     color: "#FFFFFF",
   },
   {
-    name: "Death Knight",
+    name: "Chevalier de la mort",
     value: "deathknight",
     specs: ["Blood", "Frost", "Unholy"],
     icon: "/classicons/square/deathknight_square.png",
     color: "#C41F3B",
   },
   {
-    name: "Shaman",
+    name: "Chaman",
     value: "shaman",
     specs: ["Elemental", "Enhancement", "Restoration"],
     icon: "/classicons/square/shaman_square.png",
@@ -76,14 +78,14 @@ export const Classes = [
     color: "#69CCF0",
   },
   {
-    name: "Warlock",
+    name: "Démoniste",
     value: "warlock",
     specs: ["Affliction", "Demonology", "Destruction"],
     icon: "/classicons/square/warlock_square.png",
     color: "#9482C9",
   },
   {
-    name: "Druid",
+    name: "Druide",
     value: "druid",
     specs: ["Balance", "Feral", "Guardian", "Restoration"],
     icon: "/classicons/square/druid_square.png",
@@ -91,8 +93,8 @@ export const Classes = [
   },
   /* { name: 'Monk', value: 'monk', specs: ['Brewmaster', 'Mistweaver', 'Windwalker'], icon: "/classicons/square/monk_square.png" }, */
   /* { name: 'Demon Hunter', value: 'demonhunter', specs: ['Havoc', 'Vengeance'], icon: "/classicons/square/demonhunter_square.png" }, */
-];
+].sort((a, b) => a.name.localeCompare(b.name));
 
 export const FindClass = (name: string) => {
-  return Classes.find((c) => c.value === name);
+  return Classes.find((c) => c.value === name) || Classes[0];
 };
