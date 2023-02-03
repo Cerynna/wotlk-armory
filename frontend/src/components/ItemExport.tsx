@@ -87,7 +87,7 @@ const IconTrash = styled.div`
 
 export default function ItemExport({ item }: { item: Item }) {
   const refItem = useRef<HTMLDivElement>(null);
-  if (!item.boss) return <></>;
+  if (!item.bossID) return <></>;
   return (
     <Container key={item.id} ref={refItem}>
       <ItemContainer data-attribued={item.attributed === 1 ? true : false}>
