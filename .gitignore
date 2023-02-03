@@ -2,3 +2,4 @@ node_modules
 frontend copy
 botdiscord
 frontend/src/env.json
+frontend/src/env
