@@ -125,7 +125,7 @@ function App() {
           </Routes>
         </Router>
       </main>
-      <Footer>Made with ❤️ by Hystérias & Byol</Footer>
+      <Footer>Made with ❤️ by Hystérias & Byol & Disco</Footer>
     </AppContainer>
   );
 }
