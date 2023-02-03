@@ -15,3 +15,15 @@ prod-server:
 
 prod-client:
 	cd frontend && yarn build
+
+install:
+	make -j 3 install-root install-client install-server
+
+install-root:
+	yarn install
+
+install-client:
+	cd frontend && yarn install
+
+install-server:
+	cd backend && yarn install
