@@ -15,7 +15,7 @@ prod-server:
 
 prod-client:
 	cd frontend && \
-	cd src && touch env.json && echo '{"API_URL": "http://51.15.205.148:5000/"}' > env.json && cd .. && \
+	cd src && touch env.json && echo '{"API_URL": "/"}' > env.json && cd .. && \
 	yarn build
 
 install:

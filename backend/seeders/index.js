@@ -107,19 +107,11 @@ function getlistItems() {
 
   await User.create({
     login: "Hystérias",
-    password: "azerty",
+    password: "0478876681",
     pseudo: "Hystérias",
     classe: "druid",
     role: "Restoration",
     isAdmin: true,
-  });
-  await User.create({
-    login: "Disco",
-    password: "qwerty",
-    pseudo: "Disco",
-    classe: "priest",
-    role: "Discipline",
-    isAdmin: false,
   });
   await Promise.all(getListBoss().map((boss) => Boss.create(boss)));
   await Promise.all(
