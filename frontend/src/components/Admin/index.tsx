@@ -81,6 +81,18 @@ export default function Admin() {
             <WishlistAdmin wishlist={wishlist} key={"wl-admin" + wishlist.id} />
           );
         })}
+      {path == "bosses" && bosses && (
+        <div>
+          {bosses.map((boss) => {
+            return (
+              <div key={"boss-admin" + boss.name}>
+                <H3>{boss.name}</H3>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
     </Container>
   );
 }
