@@ -14,6 +14,8 @@ app.use("/auth", require("./router/auth"));
 app.use("/item", require("./router/item"));
 app.use("/wishlist", require("./router/wishlist"));
 app.use("/user", require("./router/user"));
+// create route for front in react
+app.use("/",express.static("../frontend/build"));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
