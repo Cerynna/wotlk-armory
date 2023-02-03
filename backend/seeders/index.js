@@ -87,7 +87,8 @@ const Bosses = [
   {
     name: "Craft",
     tag: "craft",
-    image: "https://wow.zamimg.com/images/wow/icons/large/inv_misc_runedorb_01.jpg",
+    image:
+      "https://wow.zamimg.com/images/wow/icons/large/inv_misc_runedorb_01.jpg",
   },
 ];
 
@@ -109,15 +110,15 @@ function getlistItems() {
     password: "azerty",
     pseudo: "Hystérias",
     classe: "druid",
-    role: "heal",
+    role: "Restoration",
     isAdmin: true,
   });
   await User.create({
     login: "Disco",
-    password: "azerty",
+    password: "qwerty",
     pseudo: "Disco",
     classe: "priest",
-    role: "heal",
+    role: "Discipline",
     isAdmin: false,
   });
   await Promise.all(getListBoss().map((boss) => Boss.create(boss)));

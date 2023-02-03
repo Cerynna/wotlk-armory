@@ -23,7 +23,7 @@ const NavLink = styled.div`
   }
 `;
 export default function Home() {
-  const [path, setPath] = useState("/profil");
+  const [path, setPath] = useLocalStorage<string>("path", "/profil");
   const [user] = useLocalStorage<User | false>("user", false);
   const isAdmin = user && user.isAdmin ? true : false;
   return (

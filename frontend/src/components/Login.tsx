@@ -1,8 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { login, register } from "../services/Auth";
 import { User } from "../types/User";
-import useLocalStorage from "../utils/UselocalStorage";
 import Button from "./Button";
 import Input from "./Input";
 const Container = styled.div`
@@ -32,22 +31,16 @@ export default function LoginForm({
 
   const [toggleLogin, setToggleLogin] = useState(false);
 
+  useEffect(() => {
+    if (refLogin.current) refLogin.current.focus();
+  }, []);
+
   return (
     <Container>
-      <Input label="Login" refInput={refLogin} value={"Hystérias"} />
-      <Input
-        label="Password"
-        type="password"
-        refInput={refPassword}
-        value={"azerty"}
-      />
+      <Input label="Login" refInput={refLogin} />
+      <Input label="Password" type="password" refInput={refPassword} />
       {toggleLogin && (
-        <Input
-          label="Password x2"
-          type="password"
-          refInput={refPasswordBis}
-          value={"azerty"}
-        />
+        <Input label="Password x2" type="password" refInput={refPasswordBis} />
       )}
       <Button
         label="Send"

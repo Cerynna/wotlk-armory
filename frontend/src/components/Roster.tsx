@@ -28,71 +28,10 @@ export default function Roster() {
       inProgress.current = false;
     });
   });
-  console.log(roster);
-  /*   const defaultWL = {
-    items: [
-      45297, 45297, 45297, 45297, 45297, 45297, 45297, 45297, 45297, 45297,
-      45297, 45297, 45297, 45297,
-    ],
-    name: "defaulWL",
-  } as WishlistType;
-  const JSONRoster = [
-    {
-      name: "Hystérias",
-      class: FindClass("druid"),
-      wishlist: [defaultWL, defaultWL],
-    } as CharacterType,
-    {
-      name: "Aphynaroth",
-      class: FindClass("warlock"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Byol",
-      class: FindClass("priest"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Hîno",
-      class: FindClass("rogue"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Seyrox",
-      class: FindClass("paladin"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Aeth",
-      class: FindClass("deathknight"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Disco",
-      class: FindClass("priest"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Nimbex",
-      class: FindClass("priest"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Zaelynn",
-      class: FindClass("shaman"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-    {
-      name: "Vigmundur",
-      class: FindClass("warrior"),
-      wishlist: [defaultWL],
-    } as CharacterType,
-  ]; */
-
   return (
     <RosterContainer>
       {roster.map((character) => {
-        return <Character character={character} />;
+        return <Character character={character} key={character.id} />;
       })}
     </RosterContainer>
   );

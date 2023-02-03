@@ -53,7 +53,10 @@ const Boss = styled.div`
 `;
 export default function WishList() {
   const [Bosses] = useLocalStorage<BossType[]>("Bosses", []);
-  const [currentBoss, setCurrentBoss] = useState(Bosses[0].tag);
+  const [currentBoss, setCurrentBoss] = useLocalStorage<string>(
+    "currentBoss",
+    Bosses[0].tag
+  );
   return (
     <Container>
       <ListBoss>

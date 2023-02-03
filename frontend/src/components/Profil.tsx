@@ -141,6 +141,7 @@ export default function Profil() {
     setwishlist(
       wishlist.items.map((itemWishlist) => {
         return {
+          ...itemWishlist,
           ...itemWishlist.item,
           boss: itemWishlist.boss,
           attributed: itemWishlist.attributed,

@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useEffect, useRef, useState } from "react";
 import { getWishlists } from "../../services/Wishlist";
-import { FindClass } from "../../types/Character";
+import { getBosses } from "../../services/Bosses";
+import { BossType } from "../../types/Boss";
 import { Wishlist } from "../../types/Wishlist";
+import useLocalStorage from "../../utils/UselocalStorage";
+import StyledButton from "../Button";
 import LoadingSpinner from "../LoadingSpinner";
-import Switch from "../Switch";
 import WishlistAdmin from "./WishlistAdmin";
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,11 +26,21 @@ const H3 = styled.h3`
   font-weight: bold;
   color: white;
 `;
+const Header = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
 
 export default function Admin() {
   const [wishlists, setWishlists] = useState<Wishlist[] | false>(false);
+  const [bosses, setBosses] = useState<false | BossType[]>(false);
   const inProgress = useRef(false);
-
+  const [path, setPath] = useLocalStorage<string>("pathAdmin", "wishlist");
   useEffect(() => {
     if (inProgress.current) {
       return;
@@ -39,14 +52,35 @@ export default function Admin() {
       inProgress.current = false;
       if (!wishlists) return;
     });
-  });
+  }, [wishlists, setWishlists]);
+
+  useEffect(() => {
+    if (inProgress.current) {
+      return;
+    }
+    if (bosses) return;
+    inProgress.current = true;
+    Promise.resolve(getBosses()).then((bosses) => {
+      setBosses(bosses);
+      inProgress.current = false;
+      if (!bosses) return;
+    });
+  }, [bosses, setBosses]);
+
   if (!wishlists) return <LoadingSpinner />;
   return (
     <Container>
-      <H3>WishList</H3>
-      {wishlists.map((wishlist) => {
-        return <WishlistAdmin wishlist={wishlist} key={"wl-admin" + wishlist.id} />;
-      })}
+      <Header>
+        <StyledButton label="WishList" onClick={() => setPath("wishlist")} />
+        <StyledButton label="Boss" onClick={() => setPath("bosses")} />
+        <StyledButton label="Item" onClick={() => setPath("items")} />
+      </Header>
+      {path == "wishlist" &&
+        wishlists.map((wishlist) => {
+          return (
+            <WishlistAdmin wishlist={wishlist} key={"wl-admin" + wishlist.id} />
+          );
+        })}
     </Container>
   );
 }

@@ -87,7 +87,7 @@ export default function Character({ character }: { character: CharacterType }) {
           <H3>Wishlist :</H3>
           <ul>
             {character.wishlists!.map((wishlist) => {
-              return <li>{wishlist.name}</li>;
+              return <li key={wishlist.name}>{wishlist.name}</li>;
             })}
           </ul>
         </WishList>
@@ -95,9 +95,12 @@ export default function Character({ character }: { character: CharacterType }) {
       {open && isAdmin() && character.pseudo !== "Hystérias" && (
         <IsAdmin>
           <span>Admin</span>
-          <Switch value={character.isAdmin} onChange={() => {
-            postBeAdmin(character.id)
-          }} />
+          <Switch
+            value={character.isAdmin}
+            onChange={() => {
+              postBeAdmin(character.id);
+            }}
+          />
         </IsAdmin>
       )}
     </Container>

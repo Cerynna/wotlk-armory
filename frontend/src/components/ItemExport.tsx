@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import styled from "styled-components";
+import { deleteItemWishlist } from "../services/Wishlist";
 import { getQualityColor, Item } from "../types/Item";
 const Container = styled.div`
   display: flex;
@@ -20,6 +22,7 @@ const ItemContainer = styled.div`
   gap: 1rem;
   width: 100%;
   border-radius: 0.5rem;
+  padding: 0.25rem 1rem;
   &[data-attribued="true"] {
     background-color: rgba(0, 227, 106, 0.2);
   }
@@ -67,15 +70,44 @@ const IconAttributed = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const IconTrash = styled.div`
+  width: 2rem;
+  height: 2rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 0.5rem;
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+`;
 
 export default function ItemExport({ item }: { item: Item }) {
-  if (!item.id) return <></>;
+  const refItem = useRef<HTMLDivElement>(null);
+  if (!item.boss) return <></>;
   return (
-    <Container key={item.id}>
+    <Container key={item.id} ref={refItem}>
       <ItemContainer data-attribued={item.attributed === 1 ? true : false}>
         <ItemHeader>
           {item.boss && (
             <>
+              <IconTrash
+                onDoubleClick={async () => {
+                  let response = await deleteItemWishlist(
+                    item.userID,
+                    item.itemID
+                  );
+                  console.log(response);
+                  if (response) {
+                    refItem.current?.remove();
+                  }
+                }}
+              >
+                🗑️
+              </IconTrash>
               <IconAttributed>
                 {item.attributed === 1 ? "✔️" : ""}
               </IconAttributed>

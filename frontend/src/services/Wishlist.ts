@@ -92,3 +92,19 @@ export async function deleteWishlist(wishlistID: number): Promise<void> {
     },
   });
 }
+
+export async function deleteItemWishlist(userID: number, itemID: number) {
+  let response = await axios.post(
+    API_URL + "wishlist/item/" + itemID,
+    {
+      userID,
+      itemID,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    }
+  );
+  return response.data;
+}

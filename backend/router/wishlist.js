@@ -186,4 +186,19 @@ router.delete("/:id", verifAuth, verifAuthAdmin, async (req, res) => {
   res.send(true);
 });
 
+router.post("/item/:id", verifAuth, verifAuthAdmin, async (req, res) => {
+  let { userID, itemID } = req.body;
+  let itemWishlist = await ItemWishlist.findOne({
+    where: {
+      userID,
+      itemID,
+    },
+  });
+  if (!itemWishlist) {
+    return res.status(404).send("Item not found");
+  }
+  await itemWishlist.destroy();
+  return res.send(true);
+});
+
 module.exports = router;
