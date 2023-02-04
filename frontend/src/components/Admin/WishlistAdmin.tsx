@@ -5,6 +5,7 @@ import {
   togglevalidateWishlist,
 } from "../../services/Wishlist";
 import { FindClass } from "../../types/Character";
+import { getQualityColor } from "../../types/Item";
 import { Wishlist } from "../../types/Wishlist";
 import Switch from "../Switch";
 
@@ -60,6 +61,48 @@ const Trash = styled.div`
   }
 `;
 
+const ListItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  cursor: pointer;
+`;
+
+const Item = styled.a`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+`;
+
+const ItemIcon = styled.div`
+  width: 2rem;
+  height: 2rem;
+  background-image: url(https://wow.zamimg.com/images/wow/icons/large/${(props: {
+    url: string;
+  }) => props.url}.jpg);
+  background-size: cover;
+  border-radius: 0.5rem;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+const ItemName = styled.div`
+  color: ${(props: { quality: string }) => {
+    return getQualityColor(props.quality);
+  }};
+  font-weight: 700;
+  font-size: 1rem;
+`;
+
 export default function WishlistAdmin({ wishlist }: { wishlist: Wishlist }) {
   const [validate, setValidate] = useState(
     wishlist.validate === 1 ? true : false
@@ -73,32 +116,56 @@ export default function WishlistAdmin({ wishlist }: { wishlist: Wishlist }) {
     window.location.reload();
   };
 
+  const [toggleList, setToggleList] = useState(false);
+
   return (
-    <WishList  data-validate={validate}>
-      <Who>
-        <Pseudo color={FindClass(wishlist.user.classe)!.color}>
-          {wishlist.user.pseudo}
-        </Pseudo>
-        <Name>
-          {wishlist.name} | {wishlist.items.length} item
-          {wishlist.items.length > 1 ? "s" : ""}
-        </Name>
-      </Who>
-      <ValidThat>
-        <Switch
-          value={validate}
-          onChange={async (value: boolean) => {
-            handdleValidate(value);
-          }}
-        />
-        <Trash
-          onDoubleClick={() => {
-            handleDelete(wishlist.id);
-          }}
-        >
-          🗑️
-        </Trash>
-      </ValidThat>
-    </WishList>
+    <>
+      <WishList data-validate={validate}>
+        <Who>
+          <Pseudo color={FindClass(wishlist.user.classe)!.color}>
+            {wishlist.user.pseudo}
+          </Pseudo>
+          <Name
+            onClick={() => {
+              setToggleList(!toggleList);
+            }}
+          >
+            {wishlist.name} | {wishlist.items.length} item
+            {wishlist.items.length > 1 ? "s" : ""}
+          </Name>
+        </Who>
+        <ValidThat>
+          <Switch
+            value={validate}
+            onChange={async (value: boolean) => {
+              handdleValidate(value);
+            }}
+          />
+          <Trash
+            onDoubleClick={() => {
+              handleDelete(wishlist.id);
+            }}
+          >
+            🗑️
+          </Trash>
+        </ValidThat>
+      </WishList>
+      {toggleList && (
+        <ListItem>
+          {wishlist.items.map((item) => {
+            if (!item) return false;
+            return (
+              <Item
+                href={`https://www.wowhead.com/wotlk/fr/item=${item.itemID}`}
+                target={"_blank"}
+              >
+                <ItemIcon url={item.image} />
+                <ItemName quality={item.quality} children={item.name} />
+              </Item>
+            );
+          })}
+        </ListItem>
+      )}
+    </>
   );
 }

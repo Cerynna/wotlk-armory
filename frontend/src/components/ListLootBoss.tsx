@@ -68,7 +68,7 @@ const ItemIcon = styled.div`
   background-repeat: no-repeat;
 `;
 
-const ItemName = styled.div`
+const ItemName = styled.a`
   font-weight: 700;
   font-size: 1rem;
   color: ${(props: { color: string }) => props.color};
@@ -113,7 +113,11 @@ export default function ListLootBoss({ tag }: { tag: string }) {
                     <BossItem datatype={data.item.raidMode} key={data.item.id}>
                       <Header datatype={data.item.raidMode}>
                         <ItemIcon url={data.item.image} />
-                        <ItemName color={getQualityColor(data.item.quality)}>
+                        <ItemName
+                          color={getQualityColor(data.item.quality)}
+                          href={`https://www.wowhead.com/wotlk/fr/item=${data.item.itemID}`}
+                          target={"_blank"}
+                        >
                           {data.item.name}
                         </ItemName>
                       </Header>

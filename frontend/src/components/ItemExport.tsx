@@ -46,7 +46,7 @@ const ItemIcon = styled.div`
   background-position: center;
   background-repeat: no-repeat;
 `;
-const ItemName = styled.div`
+const ItemName = styled.a`
   color: ${(props: { quality: string }) => {
     return getQualityColor(props.quality);
   }};
@@ -120,7 +120,13 @@ export default function ItemExport({ item }: { item: Item }) {
           )}
 
           <ItemIcon url={item.image} />
-          <ItemName quality={item.quality}>{item.name}</ItemName>
+          <ItemName
+            quality={item.quality}
+            href={`https://www.wowhead.com/wotlk/fr/item=${item.itemID}`}
+            target={"_blank"}
+          >
+            {item.name}
+          </ItemName>
         </ItemHeader>
       </ItemContainer>
     </Container>
