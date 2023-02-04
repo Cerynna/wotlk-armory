@@ -111,6 +111,24 @@ const SpanLogin = styled.span`
   font-size: 1.5rem;
 `;
 
+const pasteClipboard = () => {
+  if (window.isSecureContext && navigator.clipboard) {
+    return navigator.clipboard.readText();
+  } else {
+    const textArea = document.createElement("textarea");
+    document.body.appendChild(textArea);
+    textArea.focus();
+    try {
+      document.execCommand("paste");
+    } catch (err) {
+      console.error("Unable to copy to clipboard", err);
+    }
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+  }
+};
+
 export default function Profil() {
   async function parse80Upgrade(text: string) {
     const data = JSON.parse(text);

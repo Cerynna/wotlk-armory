@@ -1,3 +1,5 @@
+import axios from "axios";
+import { XMLParser } from "fast-xml-parser";
 import { User } from "../types/User";
 import useLocalStorage from "./UselocalStorage";
 
@@ -14,3 +16,4 @@ export function isAdmin() {
   const user = JSON.parse(localStorage.getItem("user") || "{}") as User;
   return user && user.isAdmin ? true : false;
 }
+

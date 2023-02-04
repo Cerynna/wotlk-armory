@@ -15,7 +15,7 @@ interface Props {
 }
 
 const StyledSelect = styled.select`
-  width: 100%;
+  margin: 0 auto;
   font-size: 1rem;
   padding: 0.5rem;
   border-radius: 0.25rem;

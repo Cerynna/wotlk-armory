@@ -8,6 +8,7 @@ import useLocalStorage from "../../utils/UselocalStorage";
 import StyledButton from "../Button";
 import LoadingSpinner from "../LoadingSpinner";
 import WishlistAdmin from "./WishlistAdmin";
+import BossAdmin from "./BossAdmin";
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,7 @@ const Header = styled.div`
 
 export default function Admin() {
   const [wishlists, setWishlists] = useState<Wishlist[] | false>(false);
-  const [bosses, setBosses] = useState<false | BossType[]>(false);
+  const [bosses, setBosses] = useState<BossType[] | false>(false);
   const inProgress = useRef(false);
   const [path, setPath] = useLocalStorage<string>("pathAdmin", "wishlist");
   useEffect(() => {
@@ -65,9 +66,10 @@ export default function Admin() {
       inProgress.current = false;
       if (!bosses) return;
     });
-  }, [bosses, setBosses]);
+  }, [wishlists, bosses, setBosses]);
 
   if (!wishlists) return <LoadingSpinner />;
+  if (!bosses) return <LoadingSpinner />;
   return (
     <Container>
       <Header>
@@ -76,6 +78,7 @@ export default function Admin() {
         <StyledButton label="Item" onClick={() => setPath("items")} />
       </Header>
       {path == "wishlist" &&
+        wishlists &&
         wishlists.map((wishlist) => {
           return (
             <WishlistAdmin wishlist={wishlist} key={"wl-admin" + wishlist.id} />
@@ -83,16 +86,16 @@ export default function Admin() {
         })}
       {path == "bosses" && bosses && (
         <div>
-          {bosses.map((boss) => {
+          <BossAdmin bosses={bosses} />
+          {/*  {bosses.map((boss) => {
             return (
               <div key={"boss-admin" + boss.name}>
                 <H3>{boss.name}</H3>
               </div>
             );
-          })}
+          })} */}
         </div>
       )}
-
     </Container>
   );
 }

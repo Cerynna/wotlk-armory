@@ -1,7 +1,7 @@
 const { load } = require("csv-load-sync");
 const { sequelize, Sequelize } = require("../models");
 const { getItemFromWoWHead } = require("../utils");
-
+const Promise = require("bluebird");
 const Boss = require("../models/Boss")(sequelize, Sequelize.DataTypes);
 const Item = require("../models/Item")(sequelize, Sequelize.DataTypes);
 const User = require("../models/User")(sequelize, Sequelize.DataTypes);
@@ -113,28 +113,35 @@ function getlistItems() {
     role: "Restoration",
     isAdmin: true,
   });
-  await Promise.all(getListBoss().map((boss) => Boss.create(boss)));
-  await Promise.all(
-    getlistItems().map((item) => {
-      Boss.findOne({
+  await Promise.map(
+    getListBoss(),
+    (boss) => {
+      Boss.create(boss);
+    },
+    { concurrency: 1 }
+  );
+  await Promise.map(
+    getlistItems(),
+    async (item) => {
+      let boss = await Boss.findOne({
         where: {
           name: item.BOSS,
         },
-      }).then(async (boss) => {
-        let itemWH = await getItemFromWoWHead(item.ITEMID);
-        let cleanItem = {
-          itemID: item.ITEMID,
-          bossID: boss.id,
-          name: itemWH && itemWH.name,
-          slot: itemWH && itemWH.inventorySlot,
-          quality: itemWH && itemWH.quality,
-          image: itemWH && itemWH.icon,
-          ilvl: itemWH && itemWH.level,
-          raidSize: item.SIZE,
-          raidMode: item.MODE,
-        };
-        Item.create(cleanItem);
       });
-    })
+      let itemWH = await getItemFromWoWHead(item.ITEMID);
+      let cleanItem = {
+        itemID: item.ITEMID,
+        bossID: boss.id,
+        name: itemWH && itemWH.name,
+        slot: itemWH && itemWH.inventorySlot,
+        quality: itemWH && itemWH.quality,
+        image: itemWH && itemWH.icon,
+        ilvl: itemWH && itemWH.level,
+        raidSize: item.SIZE,
+        raidMode: item.MODE,
+      };
+      Item.create(cleanItem);
+    },
+    { concurrency: 1 }
   );
 })();

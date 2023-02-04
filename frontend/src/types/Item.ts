@@ -21,17 +21,17 @@ export type ItemWishList = {
 };
 export type Item = {
   userID: number;
-  itemID: number;
   wishlistID: number;
+  itemID: number;
   name: string;
   image: string;
-  raidMode: string;
-  id: number;
   slot: string;
   quality: string;
   ilvl: number;
   bossID: number;
+  raidMode: string;
   raidSize: number;
+  id: number;
   wishlists: ItemWishList[];
   boss?: BossType;
   attributed?: number;

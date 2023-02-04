@@ -110,10 +110,7 @@ export default function ListLootBoss({ tag }: { tag: string }) {
               items[mode].map((data) => {
                 if (data.wishlists.length > 0) {
                   return (
-                    <BossItem
-                      datatype={data.item.raidMode}
-                      key={data.item.itemID}
-                    >
+                    <BossItem datatype={data.item.raidMode} key={data.item.id}>
                       <Header datatype={data.item.raidMode}>
                         <ItemIcon url={data.item.image} />
                         <ItemName color={getQualityColor(data.item.quality)}>
