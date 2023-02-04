@@ -35,3 +35,6 @@ copy-db:
 	
 paste-db:
 	scp ~/wotlk-armory/backend/database.sqlite root@212.47.232.158:~/wotlk-armory/backend/database.sqlite
+
+run:
+	git pull && make prod
