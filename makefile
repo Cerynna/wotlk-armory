@@ -29,3 +29,6 @@ install-client:
 
 install-server:
 	cd backend && yarn install
+
+copy-db:
+	scp root@212.47.232.158:~/wotlk-armory/backend/database.sqlite ~/wotlk-armory/backend/database.sqlite
