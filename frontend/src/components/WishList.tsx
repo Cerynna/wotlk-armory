@@ -7,7 +7,6 @@ const BossIcon = styled.div`
   width: 4.7rem;
   height: 3rem;
   background-image: url(${(props: { url: string }) => props.url});
-  /* background-image: url("https://static.wikia.nocookie.net/wowpedia/images/5/51/Boss_icon_Assembly_of_Iron.png"); */
   background-size: cover;
   border-radius: 0.5rem;
   background-position: center;

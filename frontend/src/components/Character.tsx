@@ -47,6 +47,7 @@ const ClassIcon = styled.div`
   border-radius: 0.5rem;
 `;
 const Name = styled.div`
+  text-transform: capitalize;
   font-size: 1rem;
   color: ${(props) => props.color};
 `;
@@ -70,6 +71,8 @@ const IsAdmin = styled.div`
 export default function Character({ character }: { character: CharacterType }) {
   const [open, setOpen] = useState(false);
   let currentClass = FindClass(character.classe);
+  console.log(character);
+  if (!character.pseudo) return null;
   return (
     <Container
       isOpen={open}

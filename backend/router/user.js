@@ -4,6 +4,7 @@ const Promise = require("bluebird");
 
 const { User, Wishlist } = require("../models");
 const { verifAuth, verifAuthAdmin } = require("../utils");
+const { sortBy } = require("lodash");
 
 router.use((req, res, next) => {
   console.log("User: ", req.path);
@@ -35,8 +36,7 @@ router.get("/", async (req, res) => {
     );
     return users;
   });
-
-  return res.send(users);
+  return res.send(sortBy(users, ["pseudo"]));
 });
 
 router.post("/beadmin", verifAuth, verifAuthAdmin, async (req, res) => {

@@ -32,7 +32,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 1rem;
 `;
@@ -75,7 +75,6 @@ export default function Admin() {
       <Header>
         <StyledButton label="WishList" onClick={() => setPath("wishlist")} />
         <StyledButton label="Boss" onClick={() => setPath("bosses")} />
-        <StyledButton label="Item" onClick={() => setPath("items")} />
       </Header>
       {path == "wishlist" &&
         wishlists &&

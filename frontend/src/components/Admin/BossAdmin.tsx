@@ -75,11 +75,27 @@ const Loot = styled.div`
   width: calc(100% - 1rem);
   padding: 0.5rem;
   border-radius: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
-  :hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
+
+  ${({ mode }: { mode: string }) => {
+    switch (mode) {
+      case "HM":
+        return `
+        background-color: rgba(252, 192, 8, 0.5);
+        :hover {
+          background-color: rgba(252, 192, 8, 0.8);
+        }
+        `;
+      default:
+      case "NM":
+        return `
+        background-color: rgba(0, 0, 0, 0.5);
+          :hover {
+            background-color: rgba(0, 0, 0, 0.8);
+          }
+        `;
+    }
+  }}
 `;
 const ItemIcon = styled.div`
   min-width: 2rem;
@@ -94,6 +110,7 @@ const ItemIcon = styled.div`
   background-repeat: no-repeat;
 `;
 const ItemName = styled.div`
+  min-width: 350px;
   font-size: 1rem;
   font-weight: bold;
   color: white;
@@ -144,6 +161,38 @@ const AddItem = styled.div`
     background-color: rgba(0, 0, 0, 0.8);
   }
 `;
+const BossIcon = styled.div`
+  width: 4.7rem;
+  height: 3rem;
+  background-image: url(${(props: { url: string }) => props.url});
+  background-size: cover;
+  border-radius: 0.5rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  &[data-active="true"] {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+  }
+`;
+const RaidMode = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+`;
+
+const Mode = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+`;
 
 export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
   const [currentBoss, setCurrentBoss] = useState<string>(bosses[0].tag);
@@ -167,10 +216,11 @@ export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
       <Header>
         {bosses.map((boss) => {
           return (
-            <StyledButton
+            <BossIcon
               key={"boss-admin" + boss.name}
               onClick={() => setCurrentBoss(boss.tag)}
-              label={boss.name}
+              url={boss.image}
+              data-active={currentBoss === boss.tag ? true : false}
             />
           );
         })}
@@ -210,7 +260,6 @@ export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
                     raidSize: 10,
                     raidMode: "HM",
                   };
-                  console.log(item);
                   if (!item) return;
                   setItem(item);
                   setToggleAdd(false);
@@ -252,28 +301,31 @@ export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
               />
             </AddItem>
           )}
-          {raidMode.map((mode) => {
-            return (
-              <>
-                <H2>Raid {mode} :</H2>
-                {boss.items[mode].map((item) => {
-                  return (
-                    <Loot>
-                      <ItemIcon url={item.item.image} />
-                      <ItemName>{item.item.name}</ItemName>
-                      <ItemTrash
-                        onDoubleClick={async () => {
-                          deleteItem(item.item.id);
-                        }}
-                      >
-                        🗑️
-                      </ItemTrash>
-                    </Loot>
-                  );
-                })}
-              </>
-            );
-          })}
+          <RaidMode>
+            {raidMode.map((mode) => {
+              if (boss.items[mode].length === 0) return null;
+              return (
+                <Mode>
+                  <H2>Raid {mode} :</H2>
+                  {boss.items[mode].map((item) => {
+                    return (
+                      <Loot mode={item.item.raidMode}>
+                        <ItemIcon url={item.item.image} />
+                        <ItemName>{item.item.name}</ItemName>
+                        <ItemTrash
+                          onDoubleClick={async () => {
+                            deleteItem(item.item.id);
+                          }}
+                        >
+                          🗑️
+                        </ItemTrash>
+                      </Loot>
+                    );
+                  })}
+                </Mode>
+              );
+            })}
+          </RaidMode>
         </Boss>
       )}
     </Container>
