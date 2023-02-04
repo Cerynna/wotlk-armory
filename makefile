@@ -32,3 +32,6 @@ install-server:
 
 copy-db:
 	scp root@212.47.232.158:~/wotlk-armory/backend/database.sqlite ~/wotlk-armory/backend/database.sqlite
+	
+paste-db:
+	scp ~/wotlk-armory/backend/database.sqlite root@212.47.232.158:~/wotlk-armory/backend/database.sqlite
