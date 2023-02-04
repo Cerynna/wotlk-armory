@@ -260,9 +260,7 @@ export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
                   return (
                     <Loot>
                       <ItemIcon url={item.item.image} />
-                      <ItemName>
-                        {item.item.itemID} - {item.item.name}
-                      </ItemName>
+                      <ItemName>{item.item.name}</ItemName>
                       <ItemTrash
                         onDoubleClick={async () => {
                           deleteItem(item.item.id);
