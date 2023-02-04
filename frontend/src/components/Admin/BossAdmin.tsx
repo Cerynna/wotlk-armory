@@ -8,6 +8,7 @@ import {
 import { getBossByTag } from "../../services/Bosses";
 import { BossType } from "../../types/Boss";
 import { Item } from "../../types/Item";
+import useLocalStorage from "../../utils/UselocalStorage";
 import StyledButton from "../Button";
 import StyledInput from "../Input";
 import Select from "../Select";
@@ -195,14 +196,15 @@ const Mode = styled.div`
 `;
 
 export default function BossAdmin({ bosses }: { bosses: BossType[] }) {
-  const [currentBoss, setCurrentBoss] = useState<string>(bosses[0].tag);
+  const [currentBoss, setCurrentBoss] = useLocalStorage<string>(
+    "pathAdminBoss",
+    bosses[0].tag
+  );
   const [boss, setBoss] = useState<BossType | false>(false);
-
   const [toggleAdd, setToggleAdd] = useState<boolean>(false);
   const [item, setItem] = useState<any | false>(false);
-
   const refAddItemID = useRef<HTMLInputElement>(null);
-  const [addSizeMode, setAddSizeMode] = useState<string>("10-HM");
+  const [addSizeMode, setAddSizeMode] = useState<string>("25-NM");
 
   useEffect(() => {
     getBossByTag(currentBoss).then((boss) => {
