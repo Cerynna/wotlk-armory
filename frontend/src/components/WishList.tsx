@@ -34,7 +34,7 @@ const ListBoss = styled.div`
 `;
 const Boss = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   background-color: rgba(0, 0, 0, 0.8);

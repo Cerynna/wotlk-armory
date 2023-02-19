@@ -9,7 +9,7 @@ interface Props {
 const SwitchContainer = styled.label`
   position: relative;
   display: inline-block;
-  width: 40px;
+  min-width: 40px;
   height: 20px;
 `;
 

@@ -1,5 +1,5 @@
 const express = require("express");
-const { Item, User, ItemWishlist, Wishlist } = require("../models");
+const { Item, User, ItemWishlist, Wishlist, Boss } = require("../models");
 const router = express.Router();
 const Promise = require("bluebird");
 const { verifAuthAdmin, verifAuth } = require("../utils");
@@ -102,7 +102,7 @@ router.post("/unattrib", verifAuth, verifAuthAdmin, async (req, res) => {
   res.send(true);
 });
 
-router.get("/", verifAuth, verifAuthAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   let AllWishlists = await Wishlist.findAll({
     raw: true,
   }).then(async (wishlists) => {
@@ -122,12 +122,22 @@ router.get("/", verifAuth, verifAuthAdmin, async (req, res) => {
           raw: true,
         });
         items = await Promise.map(items, async (item) => {
-          return await Item.findOne({
+          const itemReturn = await Item.findOne({
             where: {
               itemID: item.itemID,
             },
             raw: true,
           });
+          if (!itemReturn) return null;
+
+          const boss = await Boss.findOne({
+            where: {
+              id: itemReturn.bossID,
+            },
+            raw: true,
+          });
+
+          return { ...itemReturn, ...item, boss };
         });
         return {
           ...wishlist,
@@ -199,6 +209,24 @@ router.post("/item/:id", verifAuth, verifAuthAdmin, async (req, res) => {
   }
   await itemWishlist.destroy();
   return res.send(true);
+});
+
+router.post("/name", verifAuth, verifAuthAdmin, async (req, res) => {
+  let { id, name } = req.body;
+  let wishlist = await Wishlist.findOne({
+    where: {
+      id: id,
+    },
+  });
+  if (!wishlist) {
+    return res.status(404).send("Wishlist not found");
+  }
+  await wishlist.update({
+    name: name,
+  });
+  await wishlist.save();
+
+  res.send(wishlist);
 });
 
 module.exports = router;

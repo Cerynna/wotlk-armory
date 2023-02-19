@@ -85,7 +85,7 @@ export default function Character({ character }: { character: CharacterType }) {
 
         <Name color={currentClass.color}>{character.pseudo}</Name>
       </Header>
-      {open && (
+{/*       {open && (
         <WishList>
           <H3>Wishlist :</H3>
           <ul>
@@ -94,7 +94,7 @@ export default function Character({ character }: { character: CharacterType }) {
             })}
           </ul>
         </WishList>
-      )}
+      )} */}
       {open && isAdmin() && character.pseudo !== "Hystérias" && (
         <IsAdmin>
           <span>Admin</span>

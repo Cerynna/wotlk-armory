@@ -30,6 +30,7 @@ interface InputProps {
   type?: string;
   value?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
   name?: string;
   id?: string;
@@ -43,6 +44,7 @@ export default function StyledInput({
   type,
   value,
   onChange,
+  onBlur,
   placeholder,
   name,
   id,
@@ -58,6 +60,7 @@ export default function StyledInput({
         type={type}
         defaultValue={value}
         onChange={onChange}
+        onBlur={onBlur}
         placeholder={placeholder}
         name={name}
         id={id}

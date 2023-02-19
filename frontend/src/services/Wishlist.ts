@@ -108,3 +108,21 @@ export async function deleteItemWishlist(userID: number, itemID: number) {
   );
   return response.data;
 }
+
+export async function postChangeName(
+  wishlistID: number,
+  name: string
+): Promise<void> {
+  await axios.post(
+    API_URL + "wishlist/name",
+    {
+      id: wishlistID,
+      name,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    }
+  );
+}

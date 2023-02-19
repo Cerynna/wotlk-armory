@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import {
   deleteWishlist,
+  postChangeName,
   togglevalidateWishlist,
 } from "../../services/Wishlist";
 import { FindClass } from "../../types/Character";
 import { getQualityColor } from "../../types/Item";
 import { Wishlist } from "../../types/Wishlist";
+import StyledInput from "../Input";
 import Switch from "../Switch";
+import RowItem from "./RowItem";
 
 const WishList = styled.div`
   display: flex;
@@ -20,7 +23,6 @@ const WishList = styled.div`
   border-radius: 0.5rem;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  cursor: pointer;
   &:hover {
     background-color: rgba(0, 0, 0, 0.6);
   }
@@ -29,20 +31,23 @@ const WishList = styled.div`
   }
 `;
 const Name = styled.div`
+  cursor: pointer;
   color: white;
 `;
 
 const Pseudo = styled.div`
+  width: 10rem;
   font-weight: 700;
   font-size: 1rem;
   color: ${(props: { color: string }) => props.color};
+  text-transform: capitalize;
 `;
 const Who = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   justify-content: flex-start;
-  gap: -0.15rem;
+  gap: 0.25rem;
 `;
 
 const ValidThat = styled.div`
@@ -64,7 +69,7 @@ const Trash = styled.div`
 const ListItem = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 0.5rem;
   width: calc(100% - 1rem);
@@ -73,34 +78,6 @@ const ListItem = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   cursor: pointer;
-`;
-
-const Item = styled.a`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  width: 100%;
-`;
-
-const ItemIcon = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background-image: url(https://wow.zamimg.com/images/wow/icons/large/${(props: {
-    url: string;
-  }) => props.url}.jpg);
-  background-size: cover;
-  border-radius: 0.5rem;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-const ItemName = styled.div`
-  color: ${(props: { quality: string }) => {
-    return getQualityColor(props.quality);
-  }};
-  font-weight: 700;
-  font-size: 1rem;
 `;
 
 export default function WishlistAdmin({ wishlist }: { wishlist: Wishlist }) {
@@ -118,21 +95,29 @@ export default function WishlistAdmin({ wishlist }: { wishlist: Wishlist }) {
 
   const [toggleList, setToggleList] = useState(false);
 
+  const refInput = useRef<HTMLInputElement>(null);
+
   return (
     <>
       <WishList data-validate={validate}>
         <Who>
-          <Pseudo color={FindClass(wishlist.user.classe)!.color}>
-            {wishlist.user.pseudo}
-          </Pseudo>
           <Name
             onClick={() => {
               setToggleList(!toggleList);
             }}
           >
-            {wishlist.name} | {wishlist.items.length} item
-            {wishlist.items.length > 1 ? "s" : ""}
+            {toggleList ? "👆" : "👇"}
           </Name>
+          <Pseudo color={FindClass(wishlist.user.classe)!.color}>
+            {wishlist.user.pseudo}
+          </Pseudo>
+          <StyledInput
+            value={wishlist.name}
+            refInput={refInput}
+            onBlur={() => {
+              postChangeName(wishlist.id, refInput.current!.value);
+            }}
+          />
         </Who>
         <ValidThat>
           <Switch
@@ -154,15 +139,8 @@ export default function WishlistAdmin({ wishlist }: { wishlist: Wishlist }) {
         <ListItem>
           {wishlist.items.map((item) => {
             if (!item) return false;
-            return (
-              <Item
-                href={`https://www.wowhead.com/wotlk/fr/item=${item.itemID}`}
-                target={"_blank"}
-              >
-                <ItemIcon url={item.image} />
-                <ItemName quality={item.quality} children={item.name} />
-              </Item>
-            );
+
+            return <RowItem item={item} key={item.id} />;
           })}
         </ListItem>
       )}
