@@ -215,6 +215,7 @@ const IneedThat = ({ item }: { item: ItemWishList }) => {
     },
     [attributed]
   );
+  if (attributed) return <></>;
   return (
     <ContainerIneedThat
       datatype={attributed ? "attributed" : "unattributed"}

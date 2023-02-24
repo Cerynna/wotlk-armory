@@ -35,11 +35,11 @@ router.get("/:tag", async (req, res) => {
           },
           raw: true,
         });
-          
 
         const wishlists = await ItemWishlist.findAll({
           where: {
             itemID: item.itemID,
+            attributed: false,
           },
           raw: true,
         }).then(async (wishlists) => {
