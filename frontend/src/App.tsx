@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getBosses } from "./services/Bosses";
 import StyledButton from "./components/Button";
 import { User } from "./types/User";
+import Nimbex from "./EasterEgg/Nimbex";
 
 const AppContainer = styled.div`
   display: flex;
@@ -81,7 +82,7 @@ const Logout = styled.div`
 
 function App() {
   const [token, setToken] = useLocalStorage("token", false);
-  const [user, setUser] = useLocalStorage<User | boolean>("user", false);
+  const [user, setUser] = useLocalStorage<User | false>("user", false);
   const [Bosses, setBosses] = useLocalStorage("Bosses", []);
 
   useEffect(() => {
@@ -94,6 +95,7 @@ function App() {
   return (
     <AppContainer>
       <Header>
+        {user && <Nimbex user={user} />}
         <span />
         <H1>Fearless Tools 🔧</H1>
         {token && (

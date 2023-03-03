@@ -23,7 +23,7 @@ export default function LoginForm({
   setUser,
 }: {
   setToken: (token: boolean) => void;
-  setUser: (user: User | boolean) => void;
+  setUser: (user: User | false) => void;
 }) {
   const refLogin = useRef<HTMLInputElement>(null);
   const refPassword = useRef<HTMLInputElement>(null);
