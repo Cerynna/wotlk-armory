@@ -6,7 +6,6 @@ import {
   togglevalidateWishlist,
 } from "../../services/Wishlist";
 import { FindClass } from "../../types/Character";
-import { getQualityColor } from "../../types/Item";
 import { Wishlist } from "../../types/Wishlist";
 import StyledInput from "../Input";
 import Switch from "../Switch";

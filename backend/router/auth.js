@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Boss, Item, User, Wishlist, ItemWishlist } = require("../models");
 const Promise = require("bluebird");
-const { verifAuth } = require("../utils");
+const { verifAuth, verifAuthAdmin } = require("../utils");
 
 function generateToken() {
   return (
@@ -155,6 +155,37 @@ router.get("/whoiam", async (req, res) => {
     );
   });
   return res.send({ ...user, wishlists });
+});
+router.post("/editprofile", verifAuth, verifAuthAdmin, async (req, res) => {
+  let { id, pseudo, classe, role } = req.body;
+  const user = await User.findOne({
+    where: {
+      id: id,
+    },
+  });
+  if (!user) {
+    return res.status(401).send("Invalid id");
+  }
+  user.pseudo = pseudo;
+  user.classe = classe;
+  user.role = role;
+  await user.save();
+  return res.send(user);
+
+  /*   let user = await User.update(
+    {
+      pseudo,
+      classe,
+      role,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+  console.log("ICI", user);
+  return res.send(user); */
 });
 
 module.exports = router;

@@ -47,6 +47,32 @@ export async function createProfile(
   return false;
 }
 
+export async function editProfile(
+  id: number,
+  pseudo: string,
+  classe: string,
+  role: string
+) {
+  let response = await axios.post(
+    API_URL + "auth/editprofile",
+    {
+      id,
+      pseudo,
+      classe,
+      role,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    }
+  );
+  if (response.data) {
+    return response.data;
+  }
+  return false;
+}
+
 export function logout() {
   return false;
 }

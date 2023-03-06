@@ -328,11 +328,13 @@ export default function Profil() {
 export const SelectClass = ({
   refInput,
   onChange,
+  defaultValue,
 }: {
   refInput: React.RefObject<HTMLSelectElement>;
   onChange: (value: string) => void;
+  defaultValue?: string;
 }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue ?? "");
   return (
     <Select
       options={[

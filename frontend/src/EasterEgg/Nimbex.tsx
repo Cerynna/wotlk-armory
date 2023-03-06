@@ -6,7 +6,7 @@ export default function Nimbex({ user }: { user: User }) {
   useEffect(() => {
     if (allowed.includes(user.pseudo)) {
       const audio = new Audio("/assets/sounds/547964");
-      audio.play();
+      audio.play(); 
     }
   });
   return <></>;
